@@ -65,7 +65,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Almaty',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -121,6 +122,8 @@ return [
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
+            'admin_key' => env('ADMIN_KEY'),
+
     ],
 
 ];
