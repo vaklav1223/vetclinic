@@ -10,10 +10,8 @@ class WorkingHours
 {
     public function handle(Request $request, Closure $next, string $from, string $to): Response
     {
-        // Получаем текущий час с учетом настроенного пояса Казахстана
         $currentHour = now()->hour;
 
-        // Если текущий час вне интервала от $from до $to
         if ($currentHour < (int)$from || $currentHour >= (int)$to) {
             return response()->view('closed', [
                 'from' => $from,

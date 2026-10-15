@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Панель администратора</title>
-</head>
-<body>
+@extends('layouts.admin')
+
+@section('title', 'Панель администратора')
+
+@section('content')
     <h1>Панель администратора</h1>
-    <nav>
-        <!-- Ссылки на остальные страницы раздела по условию задания -->
-        <a href="{{ route('admin.pets') }}">Управление питомцами (Таблица)</a> | 
-        <a href="{{ route('admin.pets.create') }}">Добавить питомца (Форма)</a> | 
-        <a href="{{ route('welcom') }}">Выйти на сайт</a>
-    </nav>
-</body>
-</html>
+    
+    <div class="card">
+        <p>Добро пожаловать в панель управления ветеринарной клиникой. Используйте меню навигации в шапке для перехода к нужным разделам.</p>
+        <p>
+            <a href="{{ route('admin.pets') }}">Управление питомцами (Таблица)</a> | 
+            <a href="{{ route('admin.pets.create') }}">Добавить питомца (Форма)</a> | 
+            <a href="{{ route('welcom') }}">Выйти на сайт</a>
+        </p>
+    </div>
+@endsection
