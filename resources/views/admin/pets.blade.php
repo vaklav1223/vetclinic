@@ -5,7 +5,7 @@
 @section('content')
     <h1>Список питомцев (Администрирование)</h1>
 
-    <div class="card">
+    <x-card>
         <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; text-align: left;">
             <thead>
                 <tr style="background-color: #f2f2f2;">
@@ -23,7 +23,7 @@
                         <td>{{ $item['breed'] ?? '-' }}</td>
                         <td>
                             @if($loop->first)
-                                <span class="badge" style="background-color: #dc3545;">новая</span>
+                                <x-badge style="background-color: #dc3545;">новая</x-badge>
                             @else
                                 -
                             @endif
@@ -36,5 +36,5 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
+    </x-card>
 @endsection

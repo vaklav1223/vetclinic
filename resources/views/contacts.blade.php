@@ -5,9 +5,9 @@
 @section('content')
     <h1>Контакты организации</h1>
     
-    <div class="card">
+    <x-card>
         <p><strong>Адрес:</strong> {{ $address }}</p>
         <p><strong>Телефон:</strong> {{ $phone }}</p>
         <p><strong>Email:</strong> {{ $email }}</p>
-    </div>
+    </x-card>
 @endsection

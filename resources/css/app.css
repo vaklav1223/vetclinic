@@ -1,11 +1,86 @@
-@import 'tailwindcss';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+header {
+    background-color: #343a40;
+    padding: 15px;
+}
+header.admin-header {
+    background-color: #212529;
+}
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 15px;
+    padding: 5px 10px;
+}
+nav a.active {
+    background-color: #007bff;
+    border-radius: 4px;
+}
+header.admin-header nav a.active {
+    background-color: #dc3545;
+}
+.content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+.card {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    background-color: #28a745;
+    color: #ffffff;
+    border-radius: 50px;
+}
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    background-color: #e9ecef;
+}
+.alert {
+    padding: 15px 20px;
+    margin: 15px 0;
+    border-radius: 6px;
+    border-left: 5px solid transparent;
+    font-family: sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+}
+.alert-info {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    border-left-color: #2196f3;
+}
+.alert-success {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+    border-left-color: #4caf50;
+}
+.alert-warning {
+    background-color: #fff3e0;
+    color: #e65100;
+    border-left-color: #ff9800;
+}
+.alert-error {
+    background-color: #ffebee;
+    color: #b71c1c;
+    border-left-color: #f44336;
+}
+.alert strong {
+    font-weight: 700;
+    margin-right: 5px;
 }

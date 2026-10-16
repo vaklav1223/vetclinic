@@ -5,8 +5,8 @@
 @section('content')
     <h1 style="color: red;">Сейчас закрыто</h1>
     
-    <div class="card">
+    <x-card>
         <h2>Работаем с {{ $from }} до {{ $to }}</h2>
         <p><a href="{{ route('welcom') }}">На главную</a></p>
-    </div>
+    </x-card>
 @endsection

@@ -5,6 +5,7 @@
 @section('content')
     <h1>{{ config('app.name') }}</h1>
     
-    <div class="card">
+    <x-card>
         <p>Сегодня: {{ now()->format('d.m.Y') }}</p>
+    </x-card>
 @endsection

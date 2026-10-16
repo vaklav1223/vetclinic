@@ -5,8 +5,8 @@
 @section('content')
     <h1>О проекте</h1>
     
-    <div class="card">
+    <x-card>
         <p><strong>Студент:</strong> {{ $fio }} (Группа: {{ $group }})</p>
         <p><strong>Описание:</strong> {{ $description }}</p>
-    </div>
+    </x-card>
 @endsection

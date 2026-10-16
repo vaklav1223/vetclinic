@@ -5,7 +5,7 @@
 @section('content')
     <h1>Правила</h1>
     
-    <div class="card">
+    <x-card>
         <p><strong>правило №1:</strong> {{ $prav }}</p>
-    </div>
+    </x-card>
 @endsection
