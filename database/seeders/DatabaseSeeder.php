@@ -2,23 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Owner;
+use App\Models\Pet;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        $this->call([
-            OwnerSeeder::class,
-            PetSeeder::class,
+        $owners = Owner::factory()->count(15)->create();
+
+        Pet::factory()->count(40)->create([
+            'owner_id' => fn () => $owners->random()->id,
         ]);
     }
-
 }

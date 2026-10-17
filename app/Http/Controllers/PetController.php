@@ -2,33 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pet;
+use App\Models\Owner;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 class PetController extends Controller
 {
-
-    public function index()
+    public function index(Request $request)
     {
-        $items = DB::table('pets')
-            ->leftJoin('owners', 'pets.owner_id', '=', 'owners.id')
-            ->select('pets.*', 'owners.name as owner_name')
-            ->get();
+        $sortWhitelist = ['latest', 'price_asc', 'price_desc'];
+        $sort = in_array($request->sort, $sortWhitelist) ? $request->sort : 'latest';
 
-        return view('catalog', compact('items'));
+        $query = Pet::with('owner')
+            ->when($request->q, function ($q, $searchTerm) {
+                $q->search($searchTerm);
+            })
+            ->when($request->owner, function ($q, $ownerId) {
+                $q->where('owner_id', $ownerId);
+            });
+
+        if ($sort === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($sort === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            $query->latest();
+        }
+
+        $items = $query->paginate(9)->withQueryString();
+        $ownersForMenu = Owner::withCount('pets')->get();
+
+        return view('catalog', compact('items', 'ownersForMenu'));
     }
 
-    public function show(int $id)
+    public function show(Pet $pet)
     {
-        $book = DB::table('pets')
-            ->leftJoin('owners', 'pets.owner_id', '=', 'owners.id')
-            ->select('pets.*', 'owners.name as owner_name')
-            ->where('pets.id', $id)
-            ->first(); 
-        abort_if(!$book, 404, 'Питомец не найден');
+        $otherPets = $pet->owner->pets()
+            ->where('id', '!=', $pet->id)
+            ->take(3)
+            ->get();
 
-        return view('pet', [
-            'id' => $id,
-            'book' => $book
-        ]);
+        return view('pet', compact('pet', 'otherPets'));
     }
 }
