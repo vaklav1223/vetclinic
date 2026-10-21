@@ -66,4 +66,9 @@ class Pet extends Model
             return asset('images/no-cover.png');
         });
     }
+    public function bookings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
 }

@@ -6,6 +6,9 @@
         <a href="{{ route('contacts') }}" class="{{ request()->routeIs('contacts') ? 'active' : '' }}">Контакты</a>
         <a href="{{ route('prav') }}" class="{{ request()->routeIs('prav') ? 'active' : '' }}">Правила</a>
         <a href="{{ route('booking') }}" class="{{ request()->routeIs('booking') ? 'active' : '' }}">Запись</a>
+        <a href="{{ route('profile') }}" style="display: inline-block; background-color: #6c757d; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-weight: bold; margin-left: 10px;">
+            Личный кабинет
+        </a>
     </div>
     <div style="display: flex; align-items: center; gap: 10px;">
         @guest

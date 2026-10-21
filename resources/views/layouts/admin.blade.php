@@ -10,16 +10,28 @@
     <div style="display: flex; align-items: center; gap: 20px;">
         <strong style="font-size: 16px; border-right: 1px solid #495057; padding-right: 20px;">Панель управления клиники</strong>
 
-        <div style="display: flex; gap: 5px;">
+        <div style="display: flex; gap: 5px; align-items: center;">
             <a href="{{ route('admin.dashboard') }}" style="color: #f8f9fa; text-decoration: none; padding: 8px 12px; font-size: 14px; border-radius: 4px;" onmouseover="this.style.backgroundColor='#495057'" onmouseout="this.style.backgroundColor='transparent'">Главная админки</a>
             <a href="{{ route('admin.pets.index') }}" style="color: #f8f9fa; text-decoration: none; padding: 8px 12px; font-size: 14px; border-radius: 4px;" onmouseover="this.style.backgroundColor='#495057'" onmouseout="this.style.backgroundColor='transparent'">Питомцы</a>
             <a href="{{ route('admin.owners.index') }}" style="color: #f8f9fa; text-decoration: none; padding: 8px 12px; font-size: 14px; border-radius: 4px;" onmouseover="this.style.backgroundColor='#495057'" onmouseout="this.style.backgroundColor='transparent'">Владельцы</a>
+            
+            <a href="{{ route('admin.bookings.index') }}" style="color: #f8f9fa; text-decoration: none; padding: 8px 12px; font-size: 14px; border-radius: 4px;" onmouseover="this.style.backgroundColor='#495057'" onmouseout="this.style.backgroundColor='transparent'">Заявки</a>
+            
             <a href="{{ route('welcom') }}" style="color: #007bff; text-decoration: none; padding: 8px 12px; font-size: 14px; border-radius: 4px; font-weight: bold;" onmouseover="this.style.backgroundColor='#495057'" onmouseout="this.style.backgroundColor='transparent'">Посмотреть сайт</a>
+
+            <a href="{{ route('admin.notifications.index') }}" style="color: #fff; text-decoration: none; margin-left: 15px; font-family: sans-serif; font-size: 14px; position: relative; display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 4px; background: rgba(255,255,255,0.1);">
+                🔔 Уведомления
+                @if(auth()->user()->unreadNotifications->count() > 0)
+                    <span style="background: #dc3545; color: white; border-radius: 50%; padding: 2px 7px; font-size: 11px; font-weight: bold; margin-left: 6px; box-shadow: 0 0 5px rgba(220,53,69,0.5);">
+                        {{ auth()->user()->unreadNotifications->count() }}
+                    </span>
+                @endif
+            </a>
         </div>
     </div>
+    
     <div style="display: flex; align-items: center; gap: 15px;">
         <span style="font-size: 14px;">Вы вошли как: <strong>{{ Auth::user()->name }}</strong> (Роль: <em>{{ Auth::user()->role }}</em>)</span>
-        
         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
             @csrf
             <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#bd2130'" onmouseout="this.style.backgroundColor='#dc3545'">
@@ -27,11 +39,7 @@
             </button>
         </form>
     </div>
-
 </header>
-
-
-
 
     <main class="content">
         @if (session('success')) <x-alert type="success">{{ session('success') }}</x-alert> @endif

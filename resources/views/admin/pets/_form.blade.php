@@ -95,7 +95,6 @@
     @error('is_vaccinated') <span class="error-msg">{{ $message }}</span> @enderror
 </div>
 
-<!-- Вывод текущей картинки (миниатюра 120px) -->
 <div style="margin-bottom: 15px;">
     <label style="display: block; margin-bottom: 5px;"><strong>Текущая обложка:</strong></label>
     <div style="margin-top: 5px;">
@@ -103,7 +102,6 @@
     </div>
 </div>
 
-<!-- Чекбокс «Удалить картинку» -->
 @if(isset($pet) && $pet->cover)
     <div style="margin-bottom: 15px;">
         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
@@ -114,7 +112,6 @@
     </div>
 @endif
 
-<!-- Поле для загрузки файла -->
 <div style="margin-bottom: 20px;">
     <label for="cover" style="display: block; margin-bottom: 5px;"><strong>Обложка питомца:</strong></label>
     <input type="file" name="cover" id="cover" @class(['form-control-pet', 'invalid' => $errors->has('cover')]) style="padding: 5px;">

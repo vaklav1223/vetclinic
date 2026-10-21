@@ -12,7 +12,7 @@
         <div class="form-group">
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" value="{{ old('email') }}">
-            <!-- Вывод общей ошибки под полем email -->
+
             @error('email')
                 <span class="error-message">{{ $message }}</span>
             @enderror
@@ -23,7 +23,6 @@
             <input type="password" id="password" name="password">
         </div>
 
-        <!-- Пункт 1: Чекбокс Запомнить меня -->
         <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
             <input type="checkbox" id="remember" name="remember" style="width: auto;">
             <label for="remember" style="margin: 0; font-weight: normal;">Запомнить меня</label>
