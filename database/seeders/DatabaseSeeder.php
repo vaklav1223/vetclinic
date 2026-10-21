@@ -2,18 +2,28 @@
 
 namespace Database\Seeders;
 
-use App\Models\Owner;
-use App\Models\Pet;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $owners = Owner::factory()->count(15)->create();
-
-        Pet::factory()->count(40)->create([
-            'owner_id' => fn () => $owners->random()->id,
+        User::factory()->create([
+            'email' => 'admin@test.kz',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+        ]);
+        User::factory()->create([
+            'email' => 'editor@test.kz',
+            'password' => Hash::make('password'),
+            'role' => 'editor',
+        ]);
+        User::factory()->create([
+            'email' => 'user@test.kz',
+            'password' => Hash::make('password'),
+            'role' => 'user',
         ]);
     }
 }

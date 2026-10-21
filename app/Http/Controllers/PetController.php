@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pet;
 use App\Models\Owner;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PetController extends Controller
 {
@@ -44,4 +45,26 @@ class PetController extends Controller
 
         return view('pet', compact('pet', 'otherPets'));
     }
+    public function pdf(Request $request)
+    {
+        $query = Pet::with('owner')
+            ->when($request->q, function ($q, $searchTerm) {
+                $q->search($searchTerm);
+            })
+            ->when($request->owner, function ($q, $ownerId) {
+                $q->where('owner_id', $ownerId);
+            });
+
+        if ($request->sort === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->sort === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            $query->latest();
+        }
+        $items = $query->get();
+        $pdf = Pdf::loadView('pdf.catalog', compact('items'));
+        return $pdf->download('catalog.pdf');
+    }
+
 }

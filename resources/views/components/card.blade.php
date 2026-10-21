@@ -1,3 +1,3 @@
 <article {{ $attributes->merge(['class' => 'card']) }}>
-    {{ $slot}}
+    {{ $slot }}
 </article>

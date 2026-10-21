@@ -1,18 +1,16 @@
 @extends('layouts.admin')
 
-@section('title', 'Добавить запись')
+@section('title', 'Добавить питомца')
 
 @section('content')
-    <h1>Форма добавления записи</h1>
+<div class="content" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h2>Добавление нового питомца</h2>
     
-    <p><a href="{{ route('admin.dashboard') }}">← В панель администратора</a></p>
-    
-    <x-card>
-        <form action="#" method="GET">
-            <p><label>Кличка: <input type="text" name="title" required></label></p>
-            <p><label>Порода: <input type="text" name="breed"></label></p>
-            <p><label>Возраст: <input type="number" name="age"></label></p>
-            <button type="button">Сохранить (Пока не работает)</button>
-        </form>
-    </x-card>
+    <a href="{{ route('admin.pets.index') }}" style="display: inline-block; margin-bottom: 1fa5px;">← Вернуться к списку</a>
+
+    <form method="POST" action="{{ route('admin.pets.store') }}" enctype="multipart/form-data" style="background: #fff; padding: 20px; border: 1px solid #dee2e6; border-radius: 8px;">
+
+        @include('admin.pets._form')
+    </form>
+</div>
 @endsection

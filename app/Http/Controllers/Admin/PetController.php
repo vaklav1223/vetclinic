@@ -4,19 +4,114 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Pet;
+use App\Models\Owner;
+use App\Http\Requests\StorePetRequest;
+use App\Http\Requests\UpdatePetRequest;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class PetController extends Controller
 {
     public function index()
     {
-        $items = DB::table('pets')->get();
+        $pets = Pet::with(['owner', 'user'])->paginate(15);
 
-        return view('admin.pets', compact('items'));
+        return view('admin.pets', compact('pets'));
     }
 
     public function create()
     {
-        return view('admin.create');
+        Gate::authorize('create', Pet::class);
+        
+        $owners = Owner::all();
+        
+        return view('admin.create', compact('owners'));
+    }
+
+    public function store(StorePetRequest $request)
+    {
+        Gate::authorize('create', Pet::class);
+
+        $validated = $request->validated();
+
+        if ($request->hasFile('cover')) {
+            $path = $request->file('cover')->store('covers', 'public');
+            $validated['cover'] = $path;
+        }
+
+        if ($request->hasFile('attachment')) {
+            $path = $request->file('attachment')->store('attachments');
+            $validated['attachment'] = $path;
+        }
+
+        Pet::create($validated + ['user_id' => $request->user()->id]);
+
+        return redirect()->route('admin.pets.index');
+    }
+
+    public function edit($id)
+    {
+        $pet = Pet::findOrFail($id);
+        
+        Gate::authorize('update', $pet);
+        
+        $owners = Owner::all();
+        
+        return view('admin.edit', compact('pet', 'owners'));
+    }
+
+    public function update(UpdatePetRequest $request, $id)
+    {
+        $pet = Pet::findOrFail($id);
+        
+        Gate::authorize('update', $pet);
+        
+        $data = $request->validated();
+
+        if ($request->has('remove_cover') && $pet->cover) {
+            Storage::disk('public')->delete($pet->cover);
+            $data['cover'] = null;
+        }
+
+        if ($request->hasFile('cover')) {
+            if ($pet->cover) {
+                Storage::disk('public')->delete($pet->cover);
+            }
+
+            $path = $request->file('cover')->store('covers', 'public');
+            $data['cover'] = $path;
+        }
+
+        if ($request->hasFile('attachment')) {
+            if ($pet->attachment) {
+                Storage::disk('local')->delete($pet->attachment);
+            }
+            $path = $request->file('attachment')->store('attachments');
+            $data['attachment'] = $path;
+        }
+
+        $pet->update($data);
+
+        return redirect()->route('admin.pets.index')->with('success', 'Изменения сохранены');
+    }
+
+    public function destroy($id)
+    {
+        $pet = Pet::findOrFail($id);
+        
+        Gate::authorize('delete', $pet);
+        
+        if ($pet->cover) {
+            Storage::disk('public')->delete($pet->cover);
+        }
+
+        if ($pet->attachment) {
+            Storage::disk('local')->delete($pet->attachment);
+        }
+        
+        $pet->delete();
+        
+        return redirect()->route('admin.pets.index');
     }
 }

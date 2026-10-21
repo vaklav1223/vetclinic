@@ -3,22 +3,20 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        
     }
 
     public function boot(): void
     {
-        Model::preventLazyLoading(! app()->isProduction());
-        DB::enableQueryLog();
-        Paginator::defaultView('pagination::semantic-ui');
+        Gate::define('admin-panel', function (User $user) {
+            return in_array($user->role, ['admin', 'editor']);
+        });
     }
-
-
 }

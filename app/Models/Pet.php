@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class Pet extends Model
 {
@@ -19,6 +21,8 @@ class Pet extends Model
         'price',
         'is_vaccinated',
         'birth_date',
+        'cover',
+        'attachment',
     ];
 
     protected function casts(): array
@@ -45,6 +49,21 @@ class Pet extends Model
         return $query->where(function (Builder $q) use ($searchTerm) {
             $q->where('title', 'like', "%{$searchTerm}%")
               ->orWhere('breed', 'like', "%{$searchTerm}%");
+        });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    protected function coverUrl(): Attribute
+    {
+        return Attribute::get(function () {
+            if ($this->cover && Storage::disk('public')->exists($this->cover)) {
+                return Storage::url($this->cover);
+            }
+            return asset('images/no-cover.png');
         });
     }
 }

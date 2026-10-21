@@ -169,3 +169,109 @@ footer {
     cursor: not-allowed;
     opacity: 0.6;
 }
+/* Общие стили ссылок в меню */
+nav a {
+    display: inline-block;
+    color: #f8f9fa;
+    text-decoration: none;
+    padding: 15px 20px;
+    font-family: sans-serif;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+nav a:hover {
+    background-color: #495057;
+}
+
+nav a.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Кнопка выхода в стиле ссылок меню */
+.nav-logout-btn {
+    background: none;
+    border: none;
+    color: #f8f9fa;
+    padding: 15px 20px;
+    font-family: sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.nav-logout-btn:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* =========================================================================
+   КРАСИВАЯ СТИЛИЗАЦИЯ ФОРМЫ РЕГИСТРАЦИИ
+   ========================================================================= */
+.register-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+}
+
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #495057;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
