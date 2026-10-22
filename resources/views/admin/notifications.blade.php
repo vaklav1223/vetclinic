@@ -19,9 +19,17 @@
         <ul style="list-style: none; padding: 0; margin: 0;">
             @foreach($notifications as $n)
                 <li style="padding: 15px 20px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; background: {{ $n->read_at ? '#fff' : '#f8f9fa' }};">
+                    
                     <span style="{{ $n->read_at ? 'color: #6c757d;' : 'font-weight: bold; color: #212529;' }}">
-                        {{ $n->data['message'] ?? 'Новое системное событие' }}
+
+                        @if(isset($n->data['url']))
+                            <a href="{{ $n->data['url'] }}" style="color: #007bff; text-decoration: underline; font-weight: bold;">
+                                {{ $n->data['message'] ?? 'PDF-каталог готов' }} (Нажмите, чтобы скачать)
+                            </a>
+                        @else
+                        @endif
                     </span>
+                    
                     <small style="color: #6c757d;">{{ $n->created_at->diffForHumans() }}</small>
                 </li>
             @endforeach

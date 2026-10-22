@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingRequest;
 use App\Services\BookingService;
-use App\Mail\BookingCreatedMail;
-use App\Notifications\NewBooking;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
+use App\Events\BookingCreated; 
+use App\Jobs\RemindAboutBooking;
 
 class BookingController extends Controller
 {
@@ -26,7 +23,7 @@ class BookingController extends Controller
 
         $data = [
             'user_id' => auth()->id(),
-            'pet_id' => 1, 
+            'pet_id' => 2, 
             'phone' => $request->phone,
             'comment' => $fullComment,
             'status' => 'new',
@@ -34,10 +31,9 @@ class BookingController extends Controller
 
         $booking = $bookingService->createBooking($data);
 
-        Mail::to(auth()->user()->email)->send(new BookingCreatedMail($booking));
+        BookingCreated::dispatch($booking);
 
-        $admins = User::where('role', 'admin')->get();
-        Notification::send($admins, new NewBooking($booking));
+        RemindAboutBooking::dispatch($booking)->delay(now()->addMinutes(2));
 
         return redirect()->route('profile')->with('success', "Заявка №{$booking->id} отправлена");
     }

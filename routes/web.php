@@ -33,6 +33,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:admin-panel'])-
     Route::resource('pets', AdminPetController::class)->except(['show']);
     Route::resource('owners', OwnerController::class);
 
+    Route::post('/exports/generate', [AdminPetController::class, 'generatePdfBackground'])->name('exports.generate');
+    
+    Route::get('/exports/{file}', [AdminPetController::class, 'downloadExportFile'])->name('exports.download');
+
+
     Route::get('/notifications', function () {
         $notifications = auth()->user()->notifications;
         return view('admin.notifications', compact('notifications'));

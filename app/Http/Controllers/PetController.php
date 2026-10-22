@@ -6,6 +6,7 @@ use App\Models\Pet;
 use App\Models\Owner;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cache;
 
 class PetController extends Controller
 {
@@ -13,25 +14,35 @@ class PetController extends Controller
     {
         $sortWhitelist = ['latest', 'price_asc', 'price_desc'];
         $sort = in_array($request->sort, $sortWhitelist) ? $request->sort : 'latest';
+        $q = $request->q;
+        $owner = $request->owner;
+        $page = $request->page ?? 1;
 
-        $query = Pet::with('owner')
-            ->when($request->q, function ($q, $searchTerm) {
-                $q->search($searchTerm);
-            })
-            ->when($request->owner, function ($q, $ownerId) {
-                $q->where('owner_id', $ownerId);
-            });
+        $cacheKey = "main.page.{$sort}.q_" . ($q ?? 'none') . ".owner_" . ($owner ?? 'none') . ".page_{$page}";
 
-        if ($sort === 'price_asc') {
-            $query->orderBy('price', 'asc');
-        } elseif ($sort === 'price_desc') {
-            $query->orderBy('price', 'desc');
-        } else {
-            $query->latest();
-        }
+        $items = Cache::remember($cacheKey, 600, function () use ($sort, $q, $owner) {
+            $query = Pet::with('owner')
+                ->when($q, function ($query, $searchTerm) {
+                    $query->search($searchTerm);
+                })
+                ->when($owner, function ($query, $ownerId) {
+                    $query->where('owner_id', $ownerId);
+                });
 
-        $items = $query->paginate(9)->withQueryString();
-        $ownersForMenu = Owner::withCount('pets')->get();
+            if ($sort === 'price_asc') {
+                $query->orderBy('price', 'asc');
+            } elseif ($sort === 'price_desc') {
+                $query->orderBy('price', 'desc');
+            } else {
+                $query->latest();
+            }
+
+            return $query->paginate(9)->withQueryString();
+        });
+
+        $ownersForMenu = Cache::remember('genres.menu', 3600, function () {
+            return Owner::withCount('pets')->get();
+        });
 
         return view('catalog', compact('items', 'ownersForMenu'));
     }
@@ -45,6 +56,7 @@ class PetController extends Controller
 
         return view('pet', compact('pet', 'otherPets'));
     }
+
     public function pdf(Request $request)
     {
         $query = Pet::with('owner')
@@ -66,5 +78,4 @@ class PetController extends Controller
         $pdf = Pdf::loadView('pdf.catalog', compact('items'));
         return $pdf->download('catalog.pdf');
     }
-
 }

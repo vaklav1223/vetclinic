@@ -10,12 +10,18 @@ use App\Http\Requests\StorePetRequest;
 use App\Http\Requests\UpdatePetRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use App\Jobs\GenerateCatalogPdf; 
+use Illuminate\Support\Facades\Cache;
 
 class PetController extends Controller
 {
     public function index()
     {
-        $pets = Pet::with(['owner', 'user'])->paginate(15);
+        $page = request('page', 1);
+        
+        $pets = Cache::remember("admin.stats.page_{$page}", 300, function () {
+            return Pet::with(['owner', 'user'])->paginate(15);
+        });
 
         return view('admin.pets', compact('pets'));
     }
@@ -46,6 +52,8 @@ class PetController extends Controller
         }
 
         Pet::create($validated + ['user_id' => $request->user()->id]);
+        
+        Cache::flush();
 
         return redirect()->route('admin.pets.index');
     }
@@ -92,6 +100,8 @@ class PetController extends Controller
         }
 
         $pet->update($data);
+        
+        Cache::flush();
 
         return redirect()->route('admin.pets.index')->with('success', 'Изменения сохранены');
     }
@@ -102,16 +112,28 @@ class PetController extends Controller
         
         Gate::authorize('delete', $pet);
         
-        if ($pet->cover) {
-            Storage::disk('public')->delete($pet->cover);
-        }
-
-        if ($pet->attachment) {
-            Storage::disk('local')->delete($pet->attachment);
-        }
-        
         $pet->delete();
         
+        Cache::flush();
+        
         return redirect()->route('admin.pets.index');
+    }
+
+    public function generatePdfBackground(Request $request)
+    {
+        GenerateCatalogPdf::dispatch($request->user());
+
+        return back()->with('success', 'Каталог формируется, вы получите уведомление');
+    }
+
+    public function downloadExportFile($file)
+    {
+        $path = "exports/{$file}";
+
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404, 'Файл не найден или еще формируется.');
+        }
+
+        return Storage::disk('local')->download($path);
     }
 }

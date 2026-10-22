@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
-
+use App\Observers\PetObserver; 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy; 
+#[ObservedBy(PetObserver::class)]
 class Pet extends Model
 {
     use HasFactory;

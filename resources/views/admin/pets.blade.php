@@ -86,5 +86,10 @@
     <div class="my-pagination">
         {{ $pets->links() }}
     </div>
+    <form action="{{ route('admin.exports.generate') }}" method="POST" class="mb-4">
+    @csrf
+    <button type="submit" class="btn btn-primary">Сформировать PDF в фоне</button>
+</form>
+
 </div>
 @endsection
