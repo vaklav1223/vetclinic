@@ -59,3 +59,25 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 "# vetclinic" 
 "# vetclinic" 
+
+## API
+
+| Метод | Адрес | Параметры | Описание | Коды ответов |
+| :--- | :--- | :--- | :--- | :--- |
+| **GET** | `/api/v1/ping` | Нет | Проверка работоспособности (кириллица) | 200 |
+| **GET** | `/api/v1/stats` | Нет | Кэшируемая статистика ветеринарной клиники | 200 |
+| **GET** | `/api/v1/books/random` | Нет | Получение случайного питомца из базы данных | 200, 404 |
+| **GET** | `/api/v1/books` | `q`, `owner_id`, `sort`, `per_page`, `min`, `max` | Список питомцев с фильтрами, поиском и сортировкой | 200, 422 |
+| **GET** | `/api/v1/books/{id}` | Нет | Просмотр детальной информации о конкретном питомце | 200, 404 |
+| **GET** | `/api/v1/genres` | Нет | Список владельцев с количеством питомцев | 200 |
+| **GET** | `/api/v1/genres/{id}/books` | `per_page` | Список питомцев конкретного владельца | 200, 404 |
+
+### Примеры ответов и коды ошибок
+
+* **200 OK** — Успешный запрос. Возвращает запрашиваемые данные или объект пагинации.
+* **404 Not Found** — Запись не найдена в базе данных или адрес не существует. Пример ответа:
+  ```json
+  {"status": "error", "message": "Resource not found."}
+  ```
+* **422 Unprocessable Content** — Ошибка валидации параметров (например, `per_page=500` или неверное поле сортировки).
+* **429 Too Many Requests** — Превышение лимита частоты запросов (`throttle`).
